@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Administrador | Registros UNICEN</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+:root {
+    --bg-dark: #020208; --bg-card: rgba(2, 2, 12, 0.96);
+    --cyan: #00f3ff; --cyan-glow: rgba(0, 243, 255, 0.35);
+    --magenta: #ff0055; --magenta-glow: rgba(255, 0, 85, 0.4);
+    --text-silver: #e2e2f0; --text-muted: #8b8ba3;
+}
+[hidden] { display: none !important; }
+body {
+    min-height: 100vh; color: #fff; background-color: var(--bg-dark);
+    background-image: radial-gradient(circle at 20% 10%, rgba(0,243,255,0.10), transparent 45%), radial-gradient(circle at 85% 90%, rgba(255,0,85,0.10), transparent 45%);
+    background-attachment: fixed;
+}
+.wrap { width: 100%; max-width: 760px; margin: 0 auto; padding: 20px 16px 50px; }
+.wrap.wide { max-width: 1280px; }
+.top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; gap: 12px; }
+.logo { height: 60px; }
+.back, .link-btn { font-family: 'Orbitron', sans-serif; font-size: 0.68rem; letter-spacing: 2px; color: var(--cyan); text-decoration: none; background: none; border: 1px solid rgba(0,243,255,0.3); padding: 9px 14px; cursor: pointer; transition: all .3s; }
+.back:hover, .link-btn:hover { background: rgba(0,243,255,0.12); box-shadow: 0 0 14px var(--cyan-glow); }
+
+.card { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.06); border-left: 4px solid var(--cyan); padding: 34px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+.tag { display: block; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 10px; }
+h1 { font-family: 'Orbitron', sans-serif; font-size: 1.7rem; font-weight: 900; letter-spacing: 0.05em; line-height: 1.2; margin-bottom: 8px; }
+.lead { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 24px; line-height: 1.5; }
+
+fieldset { border: none; margin-bottom: 20px; }
+legend, label.lbl { font-family: 'Orbitron', sans-serif; font-size: 0.66rem; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 8px; display: block; }
+.tipo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tipo legend { grid-column: 1 / -1; }
+.radio-card { position: relative; cursor: pointer; }
+.radio-card input { position: absolute; opacity: 0; }
+.radio-card span { display: block; border: 1px solid rgba(255,255,255,0.1); padding: 14px; font-family: 'Orbitron', sans-serif; font-size: 0.72rem; letter-spacing: 1px; transition: all .3s; height: 100%; }
+.radio-card small { display: block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.76rem; color: var(--text-muted); letter-spacing: 0; margin-top: 6px; }
+.radio-card input:checked + span { border-color: var(--cyan); background: rgba(0,243,255,0.07); box-shadow: 0 0 14px var(--cyan-glow); color: var(--cyan); }
+.radio-card input:focus-visible + span { outline: 2px solid var(--cyan); }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; margin-bottom: 14px; }
+.field { display: flex; flex-direction: column; }
+.field.full { grid-column: 1 / -1; }
+input[type=text], input[type=email], input[type=tel], input[type=password], select, textarea {
+    width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); color: #fff;
+    padding: 12px 14px; font-size: 0.95rem; outline: none; transition: all .3s; border-radius: 0;
+}
+select option { background: #0a0a18; color: #fff; }
+textarea { resize: vertical; min-height: 80px; }
+input:focus, select:focus, textarea:focus { border-color: var(--cyan); box-shadow: 0 0 12px var(--cyan-glow); }
+
+.consent { display: flex; gap: 10px; align-items: flex-start; font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin: 6px 0 18px; }
+.consent input { margin-top: 3px; accent-color: var(--cyan); }
+.msg { background: rgba(255,0,85,0.1); border: 1px solid var(--magenta); color: #ffd0de; padding: 12px 14px; font-size: 0.88rem; margin-bottom: 16px; line-height: 1.45; }
+.btn-main { width: 100%; background: transparent; border: 1px solid var(--magenta); color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 3px; padding: 16px; cursor: pointer; transition: all .3s; }
+.btn-main:hover:enabled { background: var(--magenta); box-shadow: 0 0 30px var(--magenta-glow); }
+.btn-main:disabled { opacity: .55; cursor: wait; }
+.btn-cyan { border-color: var(--cyan); }
+.btn-cyan:hover:enabled { background: var(--cyan); color: #000; box-shadow: 0 0 30px var(--cyan-glow); }
+
+/* Comprobante */
+.ticket { text-align: center; border-left-color: var(--magenta); }
+.ticket .big-label { font-family: 'Orbitron', sans-serif; font-size: 0.68rem; letter-spacing: 2px; color: var(--text-muted); margin-top: 18px; }
+.ticket .cupo { font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; color: var(--cyan); text-shadow: 0 0 22px var(--cyan-glow); letter-spacing: 4px; }
+.ticket .nreg { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900; color: var(--magenta); }
+.ticket .who { margin-top: 18px; color: var(--text-silver); line-height: 1.6; }
+.ticket .mailnote { margin-top: 14px; font-size: 0.85rem; color: var(--text-muted); }
+.ticket .actions { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+.ticket .actions .btn-main { flex: 1; min-width: 140px; padding: 13px; font-size: 0.72rem; }
+
+/* Administrador */
+.login-card { max-width: 420px; margin: 40px auto 0; }
+.login-card .field { margin-bottom: 14px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+.stat { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.06); padding: 16px; border-left: 3px solid var(--cyan); }
+.stat.mag { border-left-color: var(--magenta); }
+.stat b { display: block; font-family: 'Orbitron', sans-serif; font-size: 1.8rem; }
+.stat span { font-family: 'Orbitron', sans-serif; font-size: 0.62rem; letter-spacing: 1.5px; color: var(--text-muted); }
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.tab { background: transparent; border: 1px solid rgba(255,255,255,0.12); color: var(--text-silver); font-family: 'Orbitron', sans-serif; font-size: 0.7rem; letter-spacing: 1px; padding: 11px 16px; cursor: pointer; transition: all .3s; }
+.tab.active { border-color: var(--cyan); color: var(--cyan); background: rgba(0,243,255,0.07); }
+.toolbar input[type=text] { flex: 1; min-width: 180px; max-width: 340px; }
+.table-wrap { overflow: auto; max-height: 68vh; border: 1px solid rgba(255,255,255,0.08); background: var(--bg-card); }
+table { border-collapse: collapse; width: 100%; font-size: 0.82rem; }
+th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); white-space: nowrap; }
+td.wrapcell { white-space: normal; min-width: 200px; max-width: 320px; }
+th { position: sticky; top: 0; background: #0a0a1c; font-family: 'Orbitron', sans-serif; font-size: 0.62rem; letter-spacing: 1px; color: var(--cyan); z-index: 1; }
+td.cupo-cell { font-family: 'Orbitron', sans-serif; color: var(--cyan); font-weight: 700; }
+td.reg-cell { font-family: 'Orbitron', sans-serif; color: var(--magenta); font-weight: 700; }
+tr:hover td { background: rgba(0,243,255,0.04); }
+.empty { padding: 30px; text-align: center; color: var(--text-muted); }
+
+@media (max-width: 640px) {
+    .card { padding: 22px 16px; }
+    h1 { font-size: 1.3rem; }
+    .grid, .tipo { grid-template-columns: 1fr; }
+    .logo { height: 46px; }
+    .ticket .cupo { font-size: 2.3rem; }
+    .stats { grid-template-columns: 1fr; }
+    .toolbar input[type=text] { max-width: none; }
+}
+@media print {
+    body { background: #fff; color: #000; }
+    .top, .actions { display: none !important; }
+    .card { box-shadow: none; border: 2px solid #000; background: #fff; }
+    .ticket .cupo, .ticket .nreg, .tag { color: #000; text-shadow: none; }
+    .ticket .who, .ticket .big-label, .lead { color: #000; }
+}
+
+</style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<main class="wrap" id="wrap">
+    <header class="top">
+        <img class="logo" src="5fe03c41-770d-4818-ac73-ec353905d0e4.jpg" alt="Logo UNICEN">
+        <button class="link-btn" id="btn-salir" hidden>CERRAR SESIÓN</button>
+    </header>
+
+    <!-- LOGIN -->
+    <section class="card login-card" id="login-card">
+        <span class="tag">// ACCESO ADMINISTRADOR</span>
+        <h1>REGISTROS</h1>
+        <p class="lead">Ingresa con la cuenta de administrador.</p>
+        <form id="login-form" novalidate>
+            <div class="field"><label class="lbl" for="l-correo">CORREO</label><input type="email" id="l-correo" autocomplete="username" required></div>
+            <div class="field"><label class="lbl" for="l-pass">CONTRASEÑA</label><input type="password" id="l-pass" autocomplete="current-password" required></div>
+            <div class="msg" id="l-msg" role="alert" hidden></div>
+            <button class="btn-main btn-cyan" type="submit" id="l-btn">INGRESAR</button>
+        </form>
+    </section>
+
+    <!-- PANEL -->
+    <section id="panel" hidden>
+        <div class="stats">
+            <div class="stat"><b id="s-total">0</b><span>TOTAL REGISTRADOS</span></div>
+            <div class="stat mag"><b id="s-oh">0</b><span>OPEN HOUSE</span></div>
+            <div class="stat"><b id="s-ex">0</b><span>EXTERNOS (QR / DIGITAL)</span></div>
+        </div>
+        <div class="toolbar">
+            <div class="tabs">
+                <button class="tab active" data-tab="openhouse" id="tab-oh">OPEN HOUSE</button>
+                <button class="tab" data-tab="externo" id="tab-ex">EXTERNOS (QR / DIGITAL)</button>
+            </div>
+            <input type="text" id="buscar" placeholder="Buscar por nombre, CI, cupo, correo...">
+            <button class="link-btn" id="btn-csv">DESCARGAR CSV</button>
+        </div>
+        <div class="msg" id="p-msg" role="alert" hidden></div>
+        <div class="table-wrap"><table id="tabla"></table></div>
+    </section>
+</main>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// ============================================================
+// 1) CONFIGURACIÓN DE FIREBASE: pega aquí los datos de TU proyecto
+//    (Consola Firebase > Configuración del proyecto > Tus apps > Web)
+// ============================================================
+const firebaseConfig = {
+    apiKey: "PEGA_AQUI_TU_API_KEY",
+    authDomain: "PEGA_AQUI.firebaseapp.com",
+    projectId: "PEGA_AQUI_TU_PROJECT_ID",
+    storageBucket: "PEGA_AQUI.appspot.com",
+    messagingSenderId: "PEGA_AQUI",
+    appId: "PEGA_AQUI"
+};
+
+const firebaseListo = !firebaseConfig.apiKey.startsWith("PEGA");
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// ============================================================
+// LÓGICA DEL PANEL (no necesitas tocar nada de aquí hacia abajo)
+// ============================================================
+
+const $ = (s) => document.querySelector(s);
+const COLUMNAS_BASE = [
+    ['registro', 'N° REGISTRO'], ['cupo', 'CUPO'], ['nombres', 'NOMBRES'], ['apellidos', 'APELLIDOS'],
+    ['ci', 'CI'], ['celular', 'CELULAR'], ['correo', 'CORREO'], ['ciudad', 'CIUDAD'],
+    ['colegio', 'COLEGIO'], ['curso', 'CURSO']
+];
+const COLUMNAS = {
+    openhouse: [...COLUMNAS_BASE, ['fecha', 'FECHA']],
+    externo: [...COLUMNAS_BASE, ['como', '¿CÓMO SE ENTERÓ?'], ['interes', 'QUÉ QUIERE SABER'], ['fecha', 'FECHA']]
+};
+
+let registros = [];
+let tabActual = 'openhouse';
+let cancelarSnapshot = null;
+
+const formatoFecha = (d) => (d.creado && d.creado.toDate) ? d.creado.toDate().toLocaleString('es-BO') : '';
+const valor = (d, k) => k === 'fecha' ? formatoFecha(d) : k === 'registro' ? String(d.registro || '').padStart(5, '0') : (d[k] ?? '');
+
+function mostrarMsg(el, texto) { el.textContent = texto; el.hidden = !texto; }
+
+// ---------- LOGIN ----------
+$('#login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const lmsg = $('#l-msg');
+    mostrarMsg(lmsg, '');
+    if (!firebaseListo) return mostrarMsg(lmsg, 'Falta configurar Firebase en este archivo (sección 1)');
+    $('#l-btn').disabled = true;
+    try {
+        await signInWithEmailAndPassword(auth, $('#l-correo').value.trim(), $('#l-pass').value);
+    } catch (err) {
+        mostrarMsg(lmsg, 'Correo o contraseña incorrectos.');
+    } finally { $('#l-btn').disabled = false; }
+});
+$('#btn-salir').addEventListener('click', () => signOut(auth));
+
+if (firebaseListo) {
+    onAuthStateChanged(auth, (user) => {
+        if (user) iniciarPanel(); else cerrarPanel();
+    });
+}
+
+function iniciarPanel() {
+    $('#login-card').hidden = true;
+    $('#panel').hidden = false;
+    $('#btn-salir').hidden = false;
+    $('#wrap').classList.add('wide');
+    mostrarMsg($('#p-msg'), '');
+    const q = query(collection(db, 'registros'), orderBy('registro', 'desc'));
+    cancelarSnapshot = onSnapshot(q, (snap) => {
+        registros = snap.docs.map((d) => d.data());
+        render();
+    }, (err) => {
+        console.error(err);
+        mostrarMsg($('#p-msg'), err.code === 'permission-denied'
+            ? 'Esta cuenta no tiene permiso de administrador (revisa el correo en firestore.rules).'
+            : 'No se pudieron cargar los registros.');
+    });
+}
+
+function cerrarPanel() {
+    if (cancelarSnapshot) { cancelarSnapshot(); cancelarSnapshot = null; }
+    registros = [];
+    $('#login-card').hidden = false;
+    $('#panel').hidden = true;
+    $('#btn-salir').hidden = true;
+    $('#wrap').classList.remove('wide');
+    $('#l-pass').value = '';
+}
+
+// ---------- TABLA ----------
+function filtrados() {
+    const t = $('#buscar').value.trim().toLowerCase();
+    return registros.filter((r) => r.tipo === tabActual).filter((r) =>
+        !t || COLUMNAS[tabActual].some(([k]) => String(valor(r, k)).toLowerCase().includes(t)));
+}
+
+function render() {
+    const oh = registros.filter((r) => r.tipo === 'openhouse').length;
+    const ex = registros.filter((r) => r.tipo === 'externo').length;
+    $('#s-total').textContent = registros.length;
+    $('#s-oh').textContent = oh;
+    $('#s-ex').textContent = ex;
+    $('#tab-oh').textContent = `OPEN HOUSE (${oh})`;
+    $('#tab-ex').textContent = `EXTERNOS (QR / DIGITAL) (${ex})`;
+
+    const tabla = $('#tabla');
+    tabla.replaceChildren();
+    const cols = COLUMNAS[tabActual];
+    const thead = tabla.createTHead().insertRow();
+    cols.forEach(([, titulo]) => { const th = document.createElement('th'); th.textContent = titulo; thead.appendChild(th); });
+
+    const datos = filtrados();
+    const tbody = tabla.createTBody();
+    if (!datos.length) {
+        const td = tbody.insertRow().insertCell();
+        td.colSpan = cols.length; td.className = 'empty'; td.textContent = 'No hay registros para mostrar.';
+        return;
+    }
+    datos.forEach((r) => {
+        const tr = tbody.insertRow();
+        cols.forEach(([k]) => {
+            const td = tr.insertCell();
+            td.textContent = valor(r, k);   // textContent: evita inyección de HTML
+            if (k === 'cupo') td.className = 'cupo-cell';
+            if (k === 'registro') td.className = 'reg-cell';
+            if (k === 'interes') td.classList.add('wrapcell');
+        });
+    });
+}
+
+document.querySelectorAll('.tab').forEach((b) => b.addEventListener('click', () => {
+    tabActual = b.dataset.tab;
+    document.querySelectorAll('.tab').forEach((x) => x.classList.toggle('active', x === b));
+    render();
+}));
+$('#buscar').addEventListener('input', render);
+
+// ---------- CSV ----------
+function celdaCsv(v) {
+    let t = String(v ?? '');
+    if (/^[=+\-@\t\r]/.test(t)) t = "'" + t;      // evita fórmulas al abrir en Excel
+    return '"' + t.replace(/"/g, '""') + '"';
+}
+$('#btn-csv').addEventListener('click', () => {
+    const cols = COLUMNAS[tabActual];
+    const filas = [cols.map(([, t]) => celdaCsv(t)).join(',')];
+    filtrados().forEach((r) => filas.push(cols.map(([k]) => celdaCsv(valor(r, k))).join(',')));
+    const blob = new Blob(['\ufeff' + filas.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `registros_${tabActual}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+});
+</script>
+</body>
+</html>

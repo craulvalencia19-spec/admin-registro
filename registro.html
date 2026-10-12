@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro | UNICEN Innovación Digital e IA</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+:root {
+    --bg-dark: #020208; --bg-card: rgba(2, 2, 12, 0.96);
+    --cyan: #00f3ff; --cyan-glow: rgba(0, 243, 255, 0.35);
+    --magenta: #ff0055; --magenta-glow: rgba(255, 0, 85, 0.4);
+    --text-silver: #e2e2f0; --text-muted: #8b8ba3;
+}
+[hidden] { display: none !important; }
+body {
+    min-height: 100vh; color: #fff; background-color: var(--bg-dark);
+    background-image: radial-gradient(circle at 20% 10%, rgba(0,243,255,0.10), transparent 45%), radial-gradient(circle at 85% 90%, rgba(255,0,85,0.10), transparent 45%);
+    background-attachment: fixed;
+}
+.wrap { width: 100%; max-width: 760px; margin: 0 auto; padding: 20px 16px 50px; }
+.wrap.wide { max-width: 1280px; }
+.top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; gap: 12px; }
+.logo { height: 60px; }
+.back, .link-btn { font-family: 'Orbitron', sans-serif; font-size: 0.68rem; letter-spacing: 2px; color: var(--cyan); text-decoration: none; background: none; border: 1px solid rgba(0,243,255,0.3); padding: 9px 14px; cursor: pointer; transition: all .3s; }
+.back:hover, .link-btn:hover { background: rgba(0,243,255,0.12); box-shadow: 0 0 14px var(--cyan-glow); }
+
+.card { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.06); border-left: 4px solid var(--cyan); padding: 34px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+.tag { display: block; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 10px; }
+h1 { font-family: 'Orbitron', sans-serif; font-size: 1.7rem; font-weight: 900; letter-spacing: 0.05em; line-height: 1.2; margin-bottom: 8px; }
+.lead { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 24px; line-height: 1.5; }
+
+fieldset { border: none; margin-bottom: 20px; }
+legend, label.lbl { font-family: 'Orbitron', sans-serif; font-size: 0.66rem; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 8px; display: block; }
+.tipo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tipo legend { grid-column: 1 / -1; }
+.radio-card { position: relative; cursor: pointer; }
+.radio-card input { position: absolute; opacity: 0; }
+.radio-card span { display: block; border: 1px solid rgba(255,255,255,0.1); padding: 14px; font-family: 'Orbitron', sans-serif; font-size: 0.72rem; letter-spacing: 1px; transition: all .3s; height: 100%; }
+.radio-card small { display: block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.76rem; color: var(--text-muted); letter-spacing: 0; margin-top: 6px; }
+.radio-card input:checked + span { border-color: var(--cyan); background: rgba(0,243,255,0.07); box-shadow: 0 0 14px var(--cyan-glow); color: var(--cyan); }
+.radio-card input:focus-visible + span { outline: 2px solid var(--cyan); }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; margin-bottom: 14px; }
+.field { display: flex; flex-direction: column; }
+.field.full { grid-column: 1 / -1; }
+input[type=text], input[type=email], input[type=tel], input[type=password], select, textarea {
+    width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); color: #fff;
+    padding: 12px 14px; font-size: 0.95rem; outline: none; transition: all .3s; border-radius: 0;
+}
+select option { background: #0a0a18; color: #fff; }
+textarea { resize: vertical; min-height: 80px; }
+input:focus, select:focus, textarea:focus { border-color: var(--cyan); box-shadow: 0 0 12px var(--cyan-glow); }
+
+.consent { display: flex; gap: 10px; align-items: flex-start; font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin: 6px 0 18px; }
+.consent input { margin-top: 3px; accent-color: var(--cyan); }
+.msg { background: rgba(255,0,85,0.1); border: 1px solid var(--magenta); color: #ffd0de; padding: 12px 14px; font-size: 0.88rem; margin-bottom: 16px; line-height: 1.45; }
+.btn-main { width: 100%; background: transparent; border: 1px solid var(--magenta); color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 3px; padding: 16px; cursor: pointer; transition: all .3s; }
+.btn-main:hover:enabled { background: var(--magenta); box-shadow: 0 0 30px var(--magenta-glow); }
+.btn-main:disabled { opacity: .55; cursor: wait; }
+.btn-cyan { border-color: var(--cyan); }
+.btn-cyan:hover:enabled { background: var(--cyan); color: #000; box-shadow: 0 0 30px var(--cyan-glow); }
+
+/* Comprobante */
+.ticket { text-align: center; border-left-color: var(--magenta); }
+.ticket .big-label { font-family: 'Orbitron', sans-serif; font-size: 0.68rem; letter-spacing: 2px; color: var(--text-muted); margin-top: 18px; }
+.ticket .cupo { font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; color: var(--cyan); text-shadow: 0 0 22px var(--cyan-glow); letter-spacing: 4px; }
+.ticket .nreg { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900; color: var(--magenta); }
+.ticket .who { margin-top: 18px; color: var(--text-silver); line-height: 1.6; }
+.ticket .mailnote { margin-top: 14px; font-size: 0.85rem; color: var(--text-muted); }
+.ticket .actions { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+.ticket .actions .btn-main { flex: 1; min-width: 140px; padding: 13px; font-size: 0.72rem; }
+
+/* Administrador */
+.login-card { max-width: 420px; margin: 40px auto 0; }
+.login-card .field { margin-bottom: 14px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+.stat { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.06); padding: 16px; border-left: 3px solid var(--cyan); }
+.stat.mag { border-left-color: var(--magenta); }
+.stat b { display: block; font-family: 'Orbitron', sans-serif; font-size: 1.8rem; }
+.stat span { font-family: 'Orbitron', sans-serif; font-size: 0.62rem; letter-spacing: 1.5px; color: var(--text-muted); }
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.tab { background: transparent; border: 1px solid rgba(255,255,255,0.12); color: var(--text-silver); font-family: 'Orbitron', sans-serif; font-size: 0.7rem; letter-spacing: 1px; padding: 11px 16px; cursor: pointer; transition: all .3s; }
+.tab.active { border-color: var(--cyan); color: var(--cyan); background: rgba(0,243,255,0.07); }
+.toolbar input[type=text] { flex: 1; min-width: 180px; max-width: 340px; }
+.table-wrap { overflow: auto; max-height: 68vh; border: 1px solid rgba(255,255,255,0.08); background: var(--bg-card); }
+table { border-collapse: collapse; width: 100%; font-size: 0.82rem; }
+th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); white-space: nowrap; }
+td.wrapcell { white-space: normal; min-width: 200px; max-width: 320px; }
+th { position: sticky; top: 0; background: #0a0a1c; font-family: 'Orbitron', sans-serif; font-size: 0.62rem; letter-spacing: 1px; color: var(--cyan); z-index: 1; }
+td.cupo-cell { font-family: 'Orbitron', sans-serif; color: var(--cyan); font-weight: 700; }
+td.reg-cell { font-family: 'Orbitron', sans-serif; color: var(--magenta); font-weight: 700; }
+tr:hover td { background: rgba(0,243,255,0.04); }
+.empty { padding: 30px; text-align: center; color: var(--text-muted); }
+
+@media (max-width: 640px) {
+    .card { padding: 22px 16px; }
+    h1 { font-size: 1.3rem; }
+    .grid, .tipo { grid-template-columns: 1fr; }
+    .logo { height: 46px; }
+    .ticket .cupo { font-size: 2.3rem; }
+    .stats { grid-template-columns: 1fr; }
+    .toolbar input[type=text] { max-width: none; }
+}
+@media print {
+    body { background: #fff; color: #000; }
+    .top, .actions { display: none !important; }
+    .card { box-shadow: none; border: 2px solid #000; background: #fff; }
+    .ticket .cupo, .ticket .nreg, .tag { color: #000; text-shadow: none; }
+    .ticket .who, .ticket .big-label, .lead { color: #000; }
+}
+
+</style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<main class="wrap">
+    <header class="top">
+        <img class="logo" src="5fe03c41-770d-4818-ac73-ec353905d0e4.jpg" alt="Logo UNICEN">
+        <a class="back" href="index.html">← VOLVER AL SITIO</a>
+    </header>
+
+    <!-- FORMULARIO -->
+    <section class="card" id="form-card">
+        <span class="tag">// REGISTRO DE ESTUDIANTES</span>
+        <h1>RESERVA TU CUPO</h1>
+        <p class="lead">Licenciatura en Innovación Digital e Inteligencia Artificial · UNICEN. Al terminar recibirás tu número de cupo y de registro.</p>
+
+        <form id="reg-form" novalidate>
+            <fieldset class="tipo">
+                <legend>TIPO DE REGISTRO</legend>
+                <label class="radio-card"><input type="radio" name="tipo" value="externo" checked><span>ESTUDIANTE EXTERNO<small>Me registro desde el QR o la página web.</small></span></label>
+                <label class="radio-card"><input type="radio" name="tipo" value="openhouse"><span>ASISTÍ AL OPEN HOUSE<small>Estuve en el evento Open House.</small></span></label>
+            </fieldset>
+
+            <div class="grid">
+                <div class="field"><label class="lbl" for="nombres">NOMBRES</label><input type="text" id="nombres" maxlength="80" autocomplete="given-name" required></div>
+                <div class="field"><label class="lbl" for="apellidos">APELLIDOS</label><input type="text" id="apellidos" maxlength="80" autocomplete="family-name" required></div>
+                <div class="field"><label class="lbl" for="ci">CÉDULA DE IDENTIDAD (CI)</label><input type="text" id="ci" maxlength="15" inputmode="text" required></div>
+                <div class="field"><label class="lbl" for="celular">CELULAR / WHATSAPP</label><input type="tel" id="celular" maxlength="15" inputmode="numeric" autocomplete="tel" required></div>
+                <div class="field full"><label class="lbl" for="correo">CORREO GMAIL</label><input type="email" id="correo" maxlength="100" placeholder="tucorreo@gmail.com" autocomplete="email" required></div>
+                <div class="field"><label class="lbl" for="ciudad">CIUDAD</label><input type="text" id="ciudad" maxlength="60" required></div>
+                <div class="field"><label class="lbl" for="colegio">COLEGIO DE PROCEDENCIA</label><input type="text" id="colegio" maxlength="100" required></div>
+                <div class="field full">
+                    <label class="lbl" for="curso">CURSO / SITUACIÓN ACTUAL</label>
+                    <select id="curso" required>
+                        <option value="">Selecciona...</option>
+                        <option>4to de secundaria</option>
+                        <option>5to de secundaria</option>
+                        <option>6to de secundaria</option>
+                        <option>Bachiller egresado</option>
+                        <option>Estudio en otra universidad</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Cuestionario solo para estudiante externo -->
+            <div class="grid" id="extras-externo">
+                <div class="field full">
+                    <label class="lbl" for="como">¿CÓMO TE ENTERASTE DE LA CARRERA?</label>
+                    <select id="como">
+                        <option value="">Selecciona...</option>
+                        <option>Código QR / afiche</option>
+                        <option>Redes sociales</option>
+                        <option>En mi colegio</option>
+                        <option>Amigo o familiar</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+                <div class="field full">
+                    <label class="lbl" for="interes">¿QUÉ TE GUSTARÍA SABER DE LA CARRERA? (opcional)</label>
+                    <textarea id="interes" maxlength="400"></textarea>
+                </div>
+            </div>
+
+            <label class="consent"><input type="checkbox" id="acepto" required> Autorizo a UNICEN a usar estos datos para comunicarse conmigo sobre la carrera y mi cupo.</label>
+
+            <div class="msg" id="msg" role="alert" hidden></div>
+            <button type="submit" class="btn-main" id="btn-enviar">REGISTRARME</button>
+        </form>
+    </section>
+
+    <!-- COMPROBANTE -->
+    <section class="card ticket" id="ticket-card" hidden>
+        <span class="tag">// REGISTRO EXITOSO</span>
+        <h1>¡YA ESTÁS REGISTRADO!</h1>
+        <div class="big-label">TU NÚMERO DE CUPO</div>
+        <div class="cupo" id="t-cupo"></div>
+        <div class="big-label">N° DE REGISTRO</div>
+        <div class="nreg" id="t-registro"></div>
+        <p class="who" id="t-quien"></p>
+        <p class="mailnote" id="t-mail"></p>
+        <div class="actions">
+            <button class="btn-main btn-cyan" id="btn-print" type="button">GUARDAR / IMPRIMIR</button>
+            <button class="btn-main" id="btn-otro" type="button">REGISTRAR OTRO</button>
+        </div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, collection, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ============================================================
+// 1) CONFIGURACIÓN DE FIREBASE: pega aquí los datos de TU proyecto
+//    (Consola Firebase > Configuración del proyecto > Tus apps > Web)
+// ============================================================
+const firebaseConfig = {
+    apiKey: "PEGA_AQUI_TU_API_KEY",
+    authDomain: "PEGA_AQUI.firebaseapp.com",
+    projectId: "PEGA_AQUI_TU_PROJECT_ID",
+    storageBucket: "PEGA_AQUI.appspot.com",
+    messagingSenderId: "PEGA_AQUI",
+    appId: "PEGA_AQUI"
+};
+
+// ============================================================
+// 2) CORREO DE CONFIRMACIÓN (EmailJS, https://www.emailjs.com)
+//    Si lo dejas sin configurar, el registro funciona igual pero no envía correo.
+// ============================================================
+const EMAILJS = {
+    serviceId: "PEGA_AQUI_SERVICE_ID",
+    templateId: "PEGA_AQUI_TEMPLATE_ID",
+    publicKey: "PEGA_AQUI_PUBLIC_KEY"
+};
+const firebaseListo = !firebaseConfig.apiKey.startsWith("PEGA");
+const emailListo = !EMAILJS.publicKey.startsWith("PEGA");
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ============================================================
+// 3) LÓGICA DEL REGISTRO (no necesitas tocar nada de aquí hacia abajo)
+// ============================================================
+
+const $ = (s) => document.querySelector(s);
+const form = $('#reg-form');
+const msg = $('#msg');
+const btn = $('#btn-enviar');
+const extras = $('#extras-externo');
+
+const PREFIJO = { openhouse: 'OH', externo: 'EX' };
+const ETIQUETA = { openhouse: 'Open House', externo: 'Estudiante externo' };
+
+// El QR puede apuntar a registro.html?tipo=externo  y la tablet del evento a registro.html?tipo=openhouse
+const tipoUrl = new URLSearchParams(location.search).get('tipo');
+function aplicarTipoUrl() {
+    if (tipoUrl === 'openhouse' || tipoUrl === 'externo') {
+        form.querySelector(`input[name=tipo][value=${tipoUrl}]`).checked = true;
+    }
+}
+aplicarTipoUrl();
+const tipoActual = () => form.querySelector('input[name=tipo]:checked').value;
+const syncTipo = () => { extras.hidden = tipoActual() !== 'externo'; };
+form.querySelectorAll('input[name=tipo]').forEach((r) => r.addEventListener('change', syncTipo));
+syncTipo();
+
+function mostrarError(texto) {
+    msg.textContent = texto;
+    msg.hidden = !texto;
+    if (texto) msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+const limpiar = (v) => String(v || '').trim().replace(/\s+/g, ' ');
+
+function leerDatos() {
+    const tipo = tipoActual();
+    const d = {
+        tipo,
+        nombres: limpiar($('#nombres').value),
+        apellidos: limpiar($('#apellidos').value),
+        ci: limpiar($('#ci').value).toUpperCase().replace(/\s/g, ''),
+        celular: limpiar($('#celular').value).replace(/[\s-]/g, ''),
+        correo: limpiar($('#correo').value).toLowerCase(),
+        ciudad: limpiar($('#ciudad').value),
+        colegio: limpiar($('#colegio').value),
+        curso: $('#curso').value
+    };
+    if (tipo === 'externo') {
+        d.como = $('#como').value;
+        d.interes = limpiar($('#interes').value).slice(0, 400);
+    }
+    return d;
+}
+
+function validar(d) {
+    if (!d.nombres || !d.apellidos) return 'Escribe tus nombres y apellidos.';
+    if (!/^[0-9A-Z-]{5,15}$/.test(d.ci)) return 'Revisa tu CI: usa solo números y letras (entre 5 y 15 caracteres).';
+    if (!/^\+?[0-9]{7,15}$/.test(d.celular)) return 'Revisa tu número de celular.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.correo)) return 'Escribe un correo válido (ej: tucorreo@gmail.com).';
+    if (!d.ciudad || !d.colegio) return 'Completa tu ciudad y colegio de procedencia.';
+    if (!d.curso) return 'Selecciona tu curso o situación actual.';
+    if (d.tipo === 'externo' && !d.como) return 'Cuéntanos cómo te enteraste de la carrera.';
+    if (!$('#acepto').checked) return 'Debes aceptar el uso de tus datos para registrarte.';
+    return '';
+}
+
+// Genera N° de registro (global) y cupo (por tipo) de forma atómica, y guarda el registro
+async function registrar(d) {
+    const contRef = doc(db, 'contadores', 'main');
+    const unicoRef = doc(db, 'unicos', `${d.tipo}_${d.ci}`);
+    return runTransaction(db, async (tx) => {
+        const snap = await tx.get(contRef);
+        const c = snap.exists() ? snap.data() : { registro: 0, openhouse: 0, externo: 0 };
+        const registro = (c.registro || 0) + 1;
+        const secuencia = (c[d.tipo] || 0) + 1;
+        const cupo = `${PREFIJO[d.tipo]}-${String(secuencia).padStart(4, '0')}`;
+
+        tx.set(unicoRef, { registro });
+        tx.set(contRef, {
+            registro,
+            openhouse: d.tipo === 'openhouse' ? secuencia : (c.openhouse || 0),
+            externo: d.tipo === 'externo' ? secuencia : (c.externo || 0)
+        });
+        tx.set(doc(collection(db, 'registros'), String(registro).padStart(5, '0')), {
+            ...d, registro, cupo, creado: serverTimestamp()
+        });
+        return { registro, cupo };
+    });
+}
+
+async function enviarCorreo(d, r) {
+    if (!emailListo || !window.emailjs) return 'sin-configurar';
+    try {
+        await window.emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, {
+            to_email: d.correo,
+            nombre: `${d.nombres} ${d.apellidos}`,
+            cupo: r.cupo,
+            registro: String(r.registro).padStart(5, '0'),
+            tipo: ETIQUETA[d.tipo]
+        }, { publicKey: EMAILJS.publicKey });
+        return 'ok';
+    } catch (e) {
+        console.error('EmailJS:', e);
+        return 'error';
+    }
+}
+
+function mostrarComprobante(d, r, estadoCorreo) {
+    $('#t-cupo').textContent = r.cupo;
+    $('#t-registro').textContent = String(r.registro).padStart(5, '0');
+    $('#t-quien').textContent = `${d.nombres} ${d.apellidos} · ${ETIQUETA[d.tipo]}`;
+    $('#t-mail').textContent =
+        estadoCorreo === 'ok' ? `Te enviamos la confirmación a ${d.correo}.` :
+        estadoCorreo === 'error' ? 'No pudimos enviar el correo de confirmación. Guarda o toma captura de esta pantalla.' :
+        'Guarda o toma captura de esta pantalla como comprobante.';
+    $('#form-card').hidden = true;
+    $('#ticket-card').hidden = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function textoError(e) {
+    if (e && e.code === 'permission-denied') return 'No se pudo completar el registro. Es posible que este CI ya esté registrado como ese tipo de estudiante.';
+    if (e && e.code === 'unavailable') return 'Sin conexión con el servidor. Revisa tu internet e inténtalo de nuevo.';
+    return 'Ocurrió un error al registrar. Inténtalo de nuevo en unos segundos.';
+}
+
+form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    mostrarError('');
+    if (!firebaseListo) return mostrarError('Falta configurar Firebase en este archivo (sección 1)');
+    const d = leerDatos();
+    const error = validar(d);
+    if (error) return mostrarError(error);
+
+    btn.disabled = true;
+    btn.textContent = 'GENERANDO CUPO...';
+    try {
+        const r = await registrar(d);
+        const estadoCorreo = await enviarCorreo(d, r);
+        mostrarComprobante(d, r, estadoCorreo);
+        form.reset();
+        aplicarTipoUrl();
+        syncTipo();
+    } catch (e) {
+        console.error(e);
+        mostrarError(textoError(e));
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'REGISTRARME';
+    }
+});
+
+$('#btn-print').addEventListener('click', () => window.print());
+$('#btn-otro').addEventListener('click', () => {
+    $('#ticket-card').hidden = true;
+    $('#form-card').hidden = false;
+    window.scrollTo({ top: 0 });
+});
+</script>
+</body>
+</html>
